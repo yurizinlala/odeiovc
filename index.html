@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Processo nº 004-JK — Boletim de Ocorrência</title>
+<title>T.E.O.D.E.I.O — Processo nº 003-Keny</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Karla:wght@400;500;600;700&family=Caveat:wght@500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -13,9 +13,12 @@
     --azul-claro: #7FA8D9;
     --azul-suave: #E8F0FA;
     --amarelo: #F5B324;
+    --laranja: #F08C2E;
     --vermelho: #E14D4D;
+    --vermelho-claro: #E9716B;
     --vermelho-escuro: #7A1F1F;
-    --verde: #3FA34D;
+    --verde-escuro: #1F6B3A;
+    --verde-claro: #7CC957;
     --asfalto: #1E222B;
     --asfalto-2: #262B36;
     --kraft: #DCC9A3;
@@ -51,12 +54,18 @@
     justify-content:center;
     align-items:center;
     position:relative;
-    padding:36px 26px;
+    width:100%;
+    padding:36px 24px;
     padding-top:calc(36px + env(safe-area-inset-top));
-    padding-bottom:calc(36px + env(safe-area-inset-bottom));
+    padding-bottom:calc(40px + env(safe-area-inset-bottom));
     text-align:center;
-    overflow:hidden;
+    overflow-x:hidden;
+    overflow-y:auto;
   }
+
+  /* generic inner wrapper used to cap line-width WITHOUT ever constraining
+     the .scene element itself (keeps everything centered on any viewport) */
+  .inner{ max-width:340px; width:100%; margin:0 auto; display:flex; flex-direction:column; align-items:center; }
 
   .eyebrow{
     font-family:'Space Mono',monospace;
@@ -64,13 +73,13 @@
     letter-spacing:.14em;
     text-transform:uppercase;
     opacity:.75;
-    margin-bottom:14px;
+    margin-bottom:12px;
   }
 
   h1,h2{
     font-family:'Anton',sans-serif;
     font-weight:400;
-    line-height:1.05;
+    line-height:1.08;
     letter-spacing:.01em;
     margin:0 0 14px;
     text-transform:uppercase;
@@ -87,15 +96,10 @@
     font-size:clamp(11px,3vw,13px);
     letter-spacing:.08em;
     text-transform:uppercase;
-    transform:rotate(-4deg);
-    opacity:.9;
   }
 
   .scroll-hint{
-    position:absolute;
-    bottom:calc(22px + env(safe-area-inset-bottom));
-    left:50%;
-    transform:translateX(-50%);
+    margin-top:22px;
     font-family:'Space Mono',monospace;
     font-size:12px;
     letter-spacing:.12em;
@@ -108,16 +112,84 @@
     animation:bob 1.8s ease-in-out infinite;
   }
   .scroll-hint svg{ width:16px; height:16px; }
-  @keyframes bob{ 0%,100%{ transform:translate(-50%,0);} 50%{ transform:translate(-50%,6px);} }
+  @keyframes bob{ 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(6px);} }
+
+  /* ---------- MUTE BUTTON (fixed, global) ---------- */
+  #muteBtn{
+    position:fixed;
+    top:calc(14px + env(safe-area-inset-top));
+    right:14px;
+    z-index:100;
+    width:38px; height:38px;
+    border-radius:50%;
+    border:none;
+    background:rgba(0,0,0,.45);
+    color:#fff;
+    font-size:16px;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+  }
+
+  /* small persistent brand mark */
+  #brandMark{
+    position:fixed;
+    top:calc(16px + env(safe-area-inset-top));
+    left:14px;
+    z-index:100;
+    font-family:'Space Mono',monospace;
+    font-size:10.5px;
+    letter-spacing:.08em;
+    color:rgba(255,255,255,.55);
+    pointer-events:none;
+  }
 
   /* ---------- SCENE 0: LOADING ---------- */
   #scene-loading{ background:var(--asfalto); }
+  .boot-title{
+    font-family:'Anton',sans-serif;
+    font-size:clamp(26px,10vw,40px);
+    letter-spacing:.06em;
+    color:var(--amarelo);
+    white-space:nowrap;
+  }
+  .boot-title span{
+    display:inline-block;
+    opacity:0;
+    transform:translateY(6px);
+    animation:bootin .35s ease forwards;
+  }
+  .boot-title span:nth-child(1){ animation-delay:.05s; }
+  .boot-title span:nth-child(2){ animation-delay:.15s; }
+  .boot-title span:nth-child(3){ animation-delay:.25s; }
+  .boot-title span:nth-child(4){ animation-delay:.35s; }
+  .boot-title span:nth-child(5){ animation-delay:.45s; }
+  .boot-title span:nth-child(6){ animation-delay:.55s; }
+  .boot-title span:nth-child(7){ animation-delay:.65s; }
+  .boot-title span:nth-child(8){ animation-delay:.75s; }
+  .boot-title span:nth-child(9){ animation-delay:.85s; }
+  .boot-title span:nth-child(10){ animation-delay:.95s; }
+  .boot-title span:nth-child(11){ animation-delay:1.05s; }
+  .boot-title span:nth-child(12){ animation-delay:1.15s; }
+  .boot-title span:nth-child(13){ animation-delay:1.25s; }
+  @keyframes bootin{ to{ opacity:1; transform:translateY(0);} }
+
+  .boot-sub{
+    font-family:'Space Mono',monospace;
+    font-size:11.5px;
+    letter-spacing:.03em;
+    opacity:0;
+    max-width:280px;
+    margin:10px auto 20px;
+    animation:fadein .6s ease 1.5s forwards;
+  }
+  @keyframes fadein{ to{ opacity:.65; } }
+
   .load-road{
-    width:min(260px,70vw);
+    width:min(240px,66vw);
     height:6px;
     background:rgba(255,255,255,.12);
     border-radius:4px;
-    margin:26px 0 18px;
+    margin:6px 0 16px;
     overflow:hidden;
     position:relative;
   }
@@ -126,26 +198,22 @@
     position:absolute; inset:0;
     background:repeating-linear-gradient(90deg, var(--amarelo) 0 14px, transparent 14px 26px);
     width:0%;
-    animation:loadfill 2.4s ease-out forwards;
+    animation:loadfill 2.6s ease-out 1.4s forwards;
   }
   @keyframes loadfill{ to{ width:100%; } }
   #loadText{
     font-family:'Space Mono',monospace;
     font-size:13px;
-    letter-spacing:.06em;
+    letter-spacing:.04em;
     opacity:.8;
     min-height:18px;
   }
   #loadPct{
     font-family:'Anton',sans-serif;
-    font-size:44px;
+    font-size:38px;
     color:var(--amarelo);
   }
-  .load-reveal{
-    opacity:0;
-    transition:opacity .6s ease;
-    margin-top:22px;
-  }
+  .load-reveal{ opacity:0; transition:opacity .6s ease; margin-top:18px; }
   .load-reveal.show{ opacity:1; }
 
   /* ---------- KRAFT / CASE FILE SCENES ---------- */
@@ -157,67 +225,77 @@
   }
   .kraft .eyebrow{ color:var(--vermelho-escuro); opacity:.85; }
 
-  .case-cover{ max-width:380px; }
   .case-box{
     border:2px solid var(--kraft-escuro);
     border-radius:4px;
-    padding:22px 20px;
+    padding:20px 18px;
     background:rgba(255,255,255,.18);
     position:relative;
+    max-width:300px;
+    width:100%;
+    margin:6px auto 0;
   }
-  .case-box .stamp{
+  .urgent-stamp{
     position:absolute;
-    top:-18px; right:-10px;
+    top:-20px; right:-6px;
     background:var(--kraft);
     color:var(--vermelho-escuro);
     border-color:var(--vermelho-escuro);
     box-shadow:0 2px 0 rgba(0,0,0,.08);
+    opacity:0;
+    transform:scale(2.4) rotate(8deg);
+    transition:transform .5s cubic-bezier(.34,1.6,.4,1), opacity .2s ease;
   }
+  .urgent-stamp.show{ opacity:.95; transform:scale(1) rotate(-5deg); }
   .case-row{
     display:flex; justify-content:space-between; gap:10px;
     font-family:'Space Mono',monospace;
     font-size:12.5px;
     padding:7px 0;
     border-top:1px dashed rgba(42,32,19,.35);
+    text-align:left;
   }
   .case-row:first-child{ border-top:none; }
-  .case-row b{ text-transform:uppercase; letter-spacing:.04em; }
+  .case-row b{ text-transform:uppercase; letter-spacing:.03em; text-align:right; }
 
   /* Evidence cards */
   .evidence-num{
     font-family:'Anton',sans-serif;
-    font-size:clamp(46px,16vw,64px);
+    font-size:clamp(42px,15vw,58px);
     color:rgba(42,32,19,.16);
     line-height:1;
-    margin-bottom:-6px;
+    margin-bottom:-4px;
   }
   .evidence-card{
-    max-width:360px;
+    max-width:320px;
     width:100%;
-    background:rgba(255,255,255,.35);
-    border:2px solid var(--kraft-escuro);
-    border-radius:6px;
-    padding:22px 20px 20px;
+    margin:0 auto;
+    background:#fbf6ea;
+    border:1px solid rgba(42,32,19,.25);
+    border-radius:2px;
+    padding:22px 18px 20px;
     position:relative;
     opacity:0;
-    transform:translateY(18px);
+    transform:translateY(18px) rotate(var(--tilt,0deg));
+    box-shadow:0 8px 18px rgba(0,0,0,.14);
     transition:opacity .7s ease, transform .7s ease;
   }
-  .scene.active .evidence-card{ opacity:1; transform:translateY(0); }
+  .scene.active .evidence-card{ opacity:1; transform:translateY(0) rotate(var(--tilt,0deg)); }
   .evidence-card::before{
     content:'';
     position:absolute;
-    top:-10px; left:26px;
-    width:54px; height:18px;
+    top:-10px; left:24px;
+    width:52px; height:18px;
     background:rgba(225,77,77,.35);
     border:1px solid rgba(225,77,77,.5);
     transform:rotate(-3deg);
   }
   .evidence-title{
     font-family:'Anton',sans-serif;
-    font-size:clamp(19px,5.6vw,24px);
+    font-size:clamp(18px,5.4vw,23px);
     margin-bottom:8px;
     text-transform:uppercase;
+    color:var(--kraft-escuro);
   }
   .evidence-tag{
     display:inline-block;
@@ -231,11 +309,28 @@
     border-radius:3px;
     margin-bottom:10px;
   }
-  .evidence-card p{ font-size:15px; opacity:.92; }
+  .evidence-card p{ font-size:14.5px; opacity:.92; color:var(--kraft-escuro); margin-bottom:0; }
 
-  /* transition beat */
-  .verdict{ max-width:340px; }
-  .verdict .stamp{ margin-top:18px; color:var(--vermelho-escuro); border-color:var(--vermelho-escuro); }
+  /* verdict / countdown / stamp */
+  .countdown-num{
+    font-family:'Anton',sans-serif;
+    font-size:clamp(56px,20vw,84px);
+    color:var(--vermelho-escuro);
+    min-height:1.1em;
+  }
+  .stamp-final{
+    font-family:'Anton',sans-serif;
+    font-size:clamp(28px,8.6vw,38px);
+    letter-spacing:.05em;
+    color:var(--vermelho-escuro);
+    border:5px solid var(--vermelho-escuro);
+    border-radius:10px;
+    padding:8px 24px;
+    opacity:0;
+    transform:scale(2.2) rotate(-14deg);
+    transition:transform .5s cubic-bezier(.34,1.6,.4,1), opacity .25s ease;
+  }
+  .stamp-final.show{ opacity:1; transform:scale(1) rotate(-6deg); }
 
   /* ---------- ASFALTO / GAUGE SCENES ---------- */
   .asfalto{
@@ -246,24 +341,25 @@
   }
   .asfalto .eyebrow{ color:var(--amarelo); }
 
-  .gauge-wrap{ width:min(280px,78vw); margin:8px auto 4px; position:relative; }
+  .gauge-wrap{ width:min(260px,74vw); margin:4px auto 0; position:relative; }
   .gauge-wrap svg{ width:100%; height:auto; display:block; }
   .gauge-readout{
     margin-top:6px;
     font-family:'Anton',sans-serif;
-    font-size:clamp(38px,13vw,52px);
+    font-size:clamp(30px,10vw,42px);
     color:var(--amarelo);
     transition:color .3s ease;
+    line-height:1.05;
   }
   .gauge-readout.over{ color:var(--vermelho); }
   .gauge-sub{
     font-family:'Space Mono',monospace;
     font-size:12px;
-    letter-spacing:.1em;
+    letter-spacing:.08em;
     text-transform:uppercase;
-    opacity:.7;
+    opacity:.75;
   }
-  .scene.shake .gauge-card{ animation:shake .5s ease; }
+  .scene.shake .gauge-wrap{ animation:shake .5s ease; }
   @keyframes shake{
     0%,100%{ transform:translateX(0); }
     20%{ transform:translateX(-6px) rotate(-.6deg); }
@@ -272,25 +368,66 @@
     80%{ transform:translateX(3px); }
   }
 
-  /* Comparativo */
-  .compare-list{ max-width:340px; width:100%; text-align:left; }
-  .compare-item{
-    font-family:'Karla',sans-serif;
-    font-size:clamp(15px,4.4vw,17px);
-    padding:10px 0;
-    border-bottom:1px solid rgba(255,255,255,.12);
-    opacity:0;
-    transform:translateX(-14px);
-    transition:opacity .55s ease, transform .55s ease;
+  /* Comparativo (list version kept for the size-slider dots hint text) */
+  .swipe-hint{
+    font-family:'Space Mono',monospace;
+    font-size:11px;
+    letter-spacing:.06em;
+    opacity:.55;
+    margin-bottom:10px;
   }
-  .compare-item b{ color:var(--amarelo); }
-  .scene.active .compare-item{ opacity:1; transform:translateX(0); }
-  .compare-item:nth-child(1){ transition-delay:.05s; }
-  .compare-item:nth-child(2){ transition-delay:.25s; }
-  .compare-item:nth-child(3){ transition-delay:.45s; }
-  .compare-item:nth-child(4){ transition-delay:.65s; }
-  .compare-item:nth-child(5){ transition-delay:.85s; }
-  .compare-item:last-child{ border-bottom:none; font-weight:700; color:var(--creme); }
+
+  /* Size slider */
+  .size-slider{
+    display:flex;
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    width:100%;
+    max-width:320px;
+    margin:0 auto;
+    scrollbar-width:none;
+  }
+  .size-slider::-webkit-scrollbar{ display:none; }
+  .size-card{
+    flex:0 0 100%;
+    scroll-snap-align:center;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    padding:2px 10px;
+  }
+  .size-icon{ width:72px; height:72px; margin-bottom:10px; }
+  .size-icon svg{ width:100%; height:100%; display:block; }
+  .size-name{
+    font-family:'Anton',sans-serif;
+    font-size:clamp(16px,5vw,20px);
+    text-transform:uppercase;
+    margin-bottom:6px;
+  }
+  .size-caption{ font-size:13.5px; opacity:.85; min-height:54px; }
+  .size-bar{
+    width:100%; max-width:210px; height:8px;
+    background:rgba(255,255,255,.15);
+    border-radius:5px; margin-top:6px; overflow:hidden;
+  }
+  .size-bar-fill{
+    height:100%;
+    background:linear-gradient(90deg,var(--verde-claro),var(--amarelo),var(--vermelho));
+    border-radius:5px;
+  }
+  .size-card.final .size-bar-fill{
+    background:linear-gradient(90deg,var(--amarelo),var(--vermelho),var(--vermelho-escuro));
+    box-shadow:0 0 12px var(--vermelho);
+  }
+  .size-dots{ display:flex; gap:6px; justify-content:center; margin-top:14px; }
+  .size-dot{
+    width:6px; height:6px; border-radius:50%;
+    background:rgba(255,255,255,.25);
+    transition:background .3s ease, transform .3s ease;
+  }
+  .size-dot.active{ background:var(--amarelo); transform:scale(1.5); }
 
   /* Reveal / flap */
   #scene-reveal{ transition:background-color 1.8s ease, color 1.8s ease; }
@@ -298,66 +435,74 @@
   #scene-reveal .eyebrow{ transition:color 1.8s ease; }
   #scene-reveal.flip-bg .eyebrow{ color:var(--azul); opacity:.7; }
 
-  .flap-row{ display:flex; gap:8px; justify-content:center; margin:10px 0 16px; }
+  .flap-row{
+    display:flex; gap:6px; justify-content:center; flex-wrap:wrap;
+    max-width:330px; margin:12px auto 14px;
+  }
   .flap{
-    width:clamp(46px,13vw,58px);
-    height:clamp(60px,17vw,72px);
+    width:clamp(27px,7.6vw,34px);
+    height:clamp(38px,10.6vw,46px);
     background:var(--asfalto-2);
     border-radius:6px;
     display:flex; align-items:center; justify-content:center;
     font-family:'Anton',sans-serif;
-    font-size:clamp(28px,8.4vw,36px);
+    font-size:clamp(15px,4.6vw,19px);
     color:var(--amarelo);
     box-shadow:0 3px 0 rgba(0,0,0,.3);
-    transition:background .5s ease, color .5s ease, transform .18s ease;
+    transition:background .5s ease, color .5s ease;
   }
-  .flap.flipping{ transform:scaleY(.15); }
+  .flap.new{ opacity:0; transform:scale(.6); }
+  .flap.new.show{ opacity:1; transform:scale(1); transition:opacity .4s ease, transform .4s ease; }
   .flap.done{ background:var(--azul); color:#fff; }
+  .flap-row.stalling .flap:not(.done){ animation:stallflicker .16s infinite; }
+  @keyframes stallflicker{ 0%,100%{ opacity:1; } 50%{ opacity:.35; } }
 
   .reveal-sub{
     font-family:'Caveat',cursive;
     font-size:clamp(18px,5.4vw,22px);
     opacity:0;
     transition:opacity 1.2s ease;
-    margin-top:6px;
+    margin-top:4px;
   }
   .reveal-sub.show{ opacity:.95; }
 
   /* Letter */
   .letter-scene{ background:var(--creme); color:var(--tinta); }
   .letter-paper{
-    max-width:360px;
+    max-width:330px;
+    width:100%;
+    margin:0 auto;
     background:#fff;
     border:1px solid rgba(0,0,0,.08);
     border-radius:4px;
-    padding:26px 22px;
+    padding:24px 20px;
     box-shadow:0 10px 30px rgba(0,0,0,.08);
     position:relative;
     text-align:left;
   }
   .washi{
     position:absolute; top:-12px; left:24px;
-    width:64px; height:20px;
+    width:60px; height:20px;
     background:rgba(46,95,163,.28);
     transform:rotate(-4deg);
     border:1px solid rgba(46,95,163,.35);
   }
   .letter-paper p{
     font-family:'Caveat',cursive;
-    font-size:clamp(19px,5.6vw,22px);
-    line-height:1.45;
+    font-size:clamp(18px,5.2vw,21px);
+    line-height:1.4;
     color:var(--tinta);
-    margin-bottom:10px;
+    margin-bottom:9px;
   }
   .letter-sign{
-    margin-top:14px;
+    margin-top:12px;
     font-family:'Caveat',cursive;
-    font-size:clamp(21px,6vw,25px);
+    font-size:clamp(20px,5.8vw,24px);
     font-weight:700;
     color:var(--azul);
   }
   .extra-toggle{
-    margin-top:18px;
+    margin-top:16px;
     background:none;
     border:1px dashed rgba(33,32,28,.4);
     border-radius:20px;
@@ -370,16 +515,16 @@
     opacity:.75;
   }
   .extra-note{
-    max-width:320px;
-    margin-top:14px;
+    max-width:300px;
+    margin-top:12px;
     font-family:'Karla',sans-serif;
-    font-size:14px;
+    font-size:14.5px;
     opacity:0;
     max-height:0;
     overflow:hidden;
     transition:opacity .5s ease, max-height .5s ease;
   }
-  .extra-note.show{ opacity:.85; max-height:120px; }
+  .extra-note.show{ opacity:.9; max-height:120px; }
 
   @media (prefers-reduced-motion:reduce){
     *{ animation:none !important; transition:none !important; }
@@ -388,241 +533,432 @@
 </head>
 <body>
 
+<button id="muteBtn" aria-label="som">🔊</button>
+<div id="brandMark">T.E.O.D.E.I.O</div>
+
 <div id="app">
 
   <!-- SCENE 0: LOADING -->
   <section class="scene" id="scene-loading">
-    <div class="eyebrow">Sistema de Ocorrências · v1.0</div>
-    <div class="load-road"></div>
-    <div id="loadPct">0%</div>
-    <div id="loadText">carregando provas…</div>
-    <div class="load-reveal" id="loadReveal">
-      <div class="scroll-hint" style="position:static;">
-        <span>deslize pra abrir o processo</span>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+    <div class="inner">
+      <div class="eyebrow">Iniciando sistema</div>
+      <div class="boot-title" id="bootTitle"></div>
+      <div class="boot-sub">Transmissor de Evidências sobre Ódio Destinado à Espécie de Inteligência Oca</div>
+      <div class="load-road"></div>
+      <div id="loadPct">0%</div>
+      <div id="loadText">&nbsp;</div>
+      <div class="load-reveal" id="loadReveal">
+        <div class="scroll-hint">
+          <span>deslize pra abrir o processo</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- SCENE 1: CAPA DO PROCESSO -->
-  <section class="scene kraft case-cover">
-    <div class="eyebrow">Processo nº 004-JK</div>
-    <h1 style="font-size:clamp(30px,9.5vw,42px);">Boletim de<br>Ocorrência<br>Sentimental</h1>
-    <div class="case-box">
-      <span class="stamp">urgente</span>
-      <div class="case-row"><span>Vítima</span><b>Eu</b></div>
-      <div class="case-row"><span>Suspeita</span><b>Keny</b></div>
-      <div class="case-row"><span>Natureza</span><b>Provocação reiterada</b></div>
-      <div class="case-row"><span>Reincidência</span><b>Diária</b></div>
-      <div class="case-row"><span>Status</span><b>Em investigação</b></div>
-    </div>
-    <div class="scroll-hint">
-      <span>ver provas</span>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+  <section class="scene kraft" id="scene-cover">
+    <div class="inner">
+      <div class="eyebrow">Processo nº 003-Keny</div>
+      <h1 style="font-size:clamp(28px,9vw,38px);">Boletim de<br>Ocorrência</h1>
+      <div class="case-box">
+        <div class="urgent-stamp stamp" id="urgentStamp">urgente</div>
+        <div class="case-row"><span>Vítima</span><b>Eu</b></div>
+        <div class="case-row"><span>Suspeita</span><b>Keny</b></div>
+        <div class="case-row"><span>Natureza</span><b>Teste de paciência</b></div>
+        <div class="case-row"><span>Frequência</span><b>Diária</b></div>
+        <div class="case-row"><span>Status</span><b>Em investigação</b></div>
+      </div>
+      <div class="scroll-hint">
+        <span>ver provas</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
     </div>
   </section>
 
   <!-- EVIDENCE 1 -->
   <section class="scene kraft">
-    <div class="evidence-num">01</div>
-    <div class="evidence-card">
-      <span class="evidence-tag">Prova nº 01</span>
-      <div class="evidence-title">O pisão</div>
-      <p>Local do crime: em cima do meu pé. Frequência: sempre que dá.
-      Sem aviso, sem desculpa, sem dó.</p>
+    <div class="inner">
+      <div class="evidence-num">01</div>
+      <div class="evidence-card">
+        <span class="evidence-tag">Prova nº 01</span>
+        <div class="evidence-title">As pisadas</div>
+        <p>Perícia confirma: pé calçado, mira cirúrgica, zero arrependimento.
+        Motivo alegado pela suspeita: "você tava no caminho".</p>
+      </div>
     </div>
   </section>
 
   <!-- EVIDENCE 2 -->
   <section class="scene kraft">
-    <div class="evidence-num">02</div>
-    <div class="evidence-card">
-      <span class="evidence-tag">Prova nº 02</span>
-      <div class="evidence-title">O beliscão</div>
-      <p>Sem motivo aparente. Sem sinal de perigo. Só pra ver
-      minha cara de dor e rir depois.</p>
+    <div class="inner">
+      <div class="evidence-num">02</div>
+      <div class="evidence-card">
+        <span class="evidence-tag">Prova nº 02</span>
+        <div class="evidence-title">As beliscadas</div>
+        <p>Sem aviso, sem motivo, sem misericórdia. O braço já desenvolveu
+        calo emocional só de reflexo.</p>
+      </div>
     </div>
   </section>
 
   <!-- EVIDENCE 3 -->
   <section class="scene kraft">
-    <div class="evidence-num">03</div>
-    <div class="evidence-card">
-      <span class="evidence-tag">Prova nº 03</span>
-      <div class="evidence-title">A cara de julgamento</div>
-      <p>De cima pra baixo. Sem falar nada. Não precisa —
-      o olhar já é a sentença.</p>
+    <div class="inner">
+      <div class="evidence-num">03</div>
+      <div class="evidence-card">
+        <span class="evidence-tag">Prova nº 03</span>
+        <div class="evidence-title">A cara de julgamento</div>
+        <p>Basta eu abrir a boca pra ela virar promotora, juíza e torcida
+        contra, tudo ao mesmo tempo.</p>
+      </div>
     </div>
   </section>
 
   <!-- EVIDENCE 4 -->
   <section class="scene kraft">
-    <div class="evidence-num">04</div>
-    <div class="evidence-card">
-      <span class="evidence-tag">Prova nº 04</span>
-      <div class="evidence-title">O tapa</div>
-      <p>Às vezes um. Às vezes vários. Nunca com aviso prévio,
-      sempre com "eu avisei".</p>
+    <div class="inner">
+      <div class="evidence-num">04</div>
+      <div class="evidence-card">
+        <span class="evidence-tag">Prova nº 04</span>
+        <div class="evidence-title">As batidas no braço</div>
+        <p>Pra ela é "tapa de carinho". Pro boletim, é agressão premeditada
+        com requintes de crueldade.</p>
+      </div>
     </div>
   </section>
 
   <!-- EVIDENCE 5 -->
   <section class="scene kraft">
-    <div class="evidence-num">05</div>
-    <div class="evidence-card">
-      <span class="evidence-tag">Prova nº 05</span>
-      <div class="evidence-title">A capacetada</div>
-      <p>Ela bate o capacete dela no meu toda vez que dou carona.
-      Testemunha: o trânsito inteiro de Natal.</p>
+    <div class="inner">
+      <div class="evidence-num">05</div>
+      <div class="evidence-card">
+        <span class="evidence-tag">Prova nº 05</span>
+        <div class="evidence-title">As capacetadas</div>
+        <p>Capacete no capacete, toda vez que ela sobe na moto comigo.
+        Testemunhas: o trânsito inteiro de Natal.</p>
+      </div>
     </div>
   </section>
 
   <!-- EVIDENCE 6 -->
   <section class="scene kraft">
-    <div class="evidence-num">06</div>
-    <div class="evidence-card">
-      <span class="evidence-tag">Prova nº 06</span>
-      <div class="evidence-title">O olhar de reprovação</div>
-      <p>Não precisa fazer nada. Só olhar já condena.
-      Reincide todos os dias, sem exceção.</p>
-    </div>
-    <div class="scroll-hint">
-      <span>o veredito</span>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+    <div class="inner">
+      <div class="evidence-num">06</div>
+      <div class="evidence-card">
+        <span class="evidence-tag">Prova nº 06</span>
+        <div class="evidence-title">O olhar de reprovação</div>
+        <p>Não precisa dizer nada. Ela só olha e eu já me sinto réu confesso,
+        sem direito a advogado.</p>
+      </div>
+      <div class="scroll-hint">
+        <span>o veredito</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
     </div>
   </section>
 
-  <!-- VERDICT TRANSITION -->
-  <section class="scene kraft verdict">
-    <div class="eyebrow">Conclusão parcial</div>
-    <h2 style="font-size:clamp(24px,7.5vw,30px);">Diante do exposto,<br>resta comprovado,<br>com fartura de provas:</h2>
-    <div class="stamp">culpada</div>
+  <!-- VERDICT -->
+  <section class="scene kraft" id="scene-verdict">
+    <div class="inner">
+      <div class="eyebrow">Conclusão parcial</div>
+      <h2 style="font-size:clamp(22px,7vw,27px);">Diante do exposto,<br>resta comprovado,<br>com fartura de provas:</h2>
+      <div class="countdown-num" id="countdownNum"></div>
+      <div class="stamp-final" id="culpadaStamp">culpada</div>
+    </div>
   </section>
 
   <!-- GAUGE SCENE -->
   <section class="scene asfalto" id="scene-gauge">
-    <div class="eyebrow">Medidor oficial</div>
-    <h2 style="font-size:clamp(22px,7vw,28px);">Nível de ódio</h2>
-    <div class="gauge-wrap gauge-card">
-      <svg viewBox="0 0 300 175">
-        <defs>
-          <linearGradient id="gGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#3FA34D"/>
-            <stop offset="45%" stop-color="#F5B324"/>
-            <stop offset="78%" stop-color="#E14D4D"/>
-            <stop offset="100%" stop-color="#7A1F1F"/>
-          </linearGradient>
-        </defs>
-        <path id="gTrack" d="M22,160 A128,128 0 0 1 278,160" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="22" stroke-linecap="round"/>
-        <path id="gFill" d="M22,160 A128,128 0 0 1 278,160" fill="none" stroke="url(#gGrad)" stroke-width="22" stroke-linecap="round"/>
-        <circle id="gDot" cx="22" cy="160" r="9" fill="#FFF8EC"/>
-      </svg>
-      <div class="gauge-readout" id="gaugeVal">0%</div>
-      <div class="gauge-sub" id="gaugeSub">baixo</div>
-    </div>
-    <div class="scroll-hint">
-      <span>o tamanho disso</span>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+    <div class="inner">
+      <div class="eyebrow">Medidor oficial</div>
+      <h2 style="font-size:clamp(21px,6.6vw,27px);">Nível de ódio</h2>
+      <div class="gauge-wrap">
+        <svg viewBox="0 0 300 175">
+          <defs>
+            <linearGradient id="gGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%"  stop-color="#1F6B3A"/>
+              <stop offset="16%" stop-color="#1F6B3A"/>
+              <stop offset="16%" stop-color="#7CC957"/>
+              <stop offset="34%" stop-color="#7CC957"/>
+              <stop offset="34%" stop-color="#F5B324"/>
+              <stop offset="52%" stop-color="#F5B324"/>
+              <stop offset="52%" stop-color="#F08C2E"/>
+              <stop offset="70%" stop-color="#F08C2E"/>
+              <stop offset="70%" stop-color="#E9716B"/>
+              <stop offset="88%" stop-color="#E9716B"/>
+              <stop offset="88%" stop-color="#7A1F1F"/>
+              <stop offset="100%" stop-color="#7A1F1F"/>
+            </linearGradient>
+          </defs>
+          <path id="gTrack" d="M22,160 A128,128 0 0 1 278,160" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="22" stroke-linecap="round"/>
+          <path id="gFill" d="M22,160 A128,128 0 0 1 278,160" fill="none" stroke="url(#gGrad)" stroke-width="22" stroke-linecap="round"/>
+          <circle id="gDot" cx="22" cy="160" r="9" fill="#FFF8EC"/>
+        </svg>
+        <div class="gauge-readout" id="gaugeVal">0%</div>
+        <div class="gauge-sub" id="gaugeSub">não teve doce</div>
+      </div>
+      <div class="scroll-hint">
+        <span>o tamanho disso</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
     </div>
   </section>
 
-  <!-- COMPARATIVO -->
+  <!-- SIZE SLIDER -->
   <section class="scene asfalto">
-    <div class="eyebrow">Comparativo de tamanho</div>
-    <h2 style="font-size:clamp(20px,6.5vw,26px);">Pra você entender<br>o tamanho disso:</h2>
-    <div class="compare-list">
-      <div class="compare-item">É maior que <b>uma pizza inteira</b> — e olha que eu não divido pizza com ninguém.</div>
-      <div class="compare-item">É maior que <b>um capacete</b> — e olha que ele já levou umas capacetadas.</div>
-      <div class="compare-item">É maior que <b>essa moto</b> que eu ando o dia inteiro.</div>
-      <div class="compare-item">É maior que <b>a Ponte Newton Navarro</b>.</div>
-      <div class="compare-item">É maior que <b>toda a Via Costeira</b>, de ponta a ponta.</div>
-      <div class="compare-item">Na real, isso aqui não cabe <b>em Natal inteira</b>.</div>
-    </div>
-    <div class="scroll-hint">
-      <span>continuar</span>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+    <div class="inner">
+      <div class="eyebrow">Comparativo de tamanho</div>
+      <h2 style="font-size:clamp(19px,6vw,24px);">O tamanho disso</h2>
+      <div class="swipe-hint">← arraste os cards →</div>
+
+      <div class="size-slider" id="sizeSlider">
+        <div class="size-card">
+          <div class="size-icon"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="34" fill="none" stroke="var(--azul-claro)" stroke-width="8"/><circle cx="50" cy="14" r="6" fill="var(--amarelo)"/><circle cx="86" cy="50" r="6" fill="var(--amarelo)"/><circle cx="50" cy="86" r="6" fill="var(--amarelo)"/><circle cx="14" cy="50" r="6" fill="var(--amarelo)"/></svg></div>
+          <div class="size-name">Sua pulseirinha</div>
+          <p class="size-caption">Aquela que você amava e sumiu no mundo. Luto oficial: em andamento.</p>
+          <div class="size-bar"><div class="size-bar-fill" style="width:8%"></div></div>
+        </div>
+
+        <div class="size-card">
+          <div class="size-icon"><svg viewBox="0 0 100 100"><rect x="20" y="30" width="60" height="40" rx="6" fill="#7a4a2b"/><rect x="20" y="30" width="60" height="14" rx="6" fill="#c98b52"/><rect x="46" y="30" width="8" height="40" fill="#5c3620"/></svg></div>
+          <div class="size-name">Nutella B-ready</div>
+          <p class="size-caption">Seu docinho favorito. Ganhou seu coração antes de mim, tecnicamente.</p>
+          <div class="size-bar"><div class="size-bar-fill" style="width:18%"></div></div>
+        </div>
+
+        <div class="size-card">
+          <div class="size-icon"><svg viewBox="0 0 100 100"><rect x="18" y="24" width="64" height="52" rx="4" fill="var(--creme)"/><circle cx="18" cy="50" r="6" fill="var(--asfalto)"/><circle cx="82" cy="50" r="6" fill="var(--asfalto)"/><line x1="30" y1="38" x2="70" y2="38" stroke="var(--asfalto)" stroke-width="3"/><line x1="30" y1="48" x2="70" y2="48" stroke="var(--asfalto)" stroke-width="3"/><line x1="30" y1="58" x2="58" y2="58" stroke="var(--asfalto)" stroke-width="3"/></svg></div>
+          <div class="size-name">Comprovante de ingresso</div>
+          <p class="size-caption">Prova oficial de que a gente trabalha junto no Cinemark. Testemunha: a bilheteria.</p>
+          <div class="size-bar"><div class="size-bar-fill" style="width:28%"></div></div>
+        </div>
+
+        <div class="size-card">
+          <div class="size-icon"><svg viewBox="0 0 100 100"><path d="M38 14 h24 v34 c0 8 6 10 14 14 l10 6 c6 4 6 14 -4 16 h-40 c-10 0 -14 -8 -14 -18 v-34 c0 -10 4 -18 10 -18 z" fill="var(--azul-claro)"/><rect x="38" y="14" width="24" height="10" fill="var(--creme)"/></svg></div>
+          <div class="size-name">Meia do Tom</div>
+          <p class="size-caption">Do Tom e Jerry que vive no seu guarda-roupa. Edição de colecionador.</p>
+          <div class="size-bar"><div class="size-bar-fill" style="width:38%"></div></div>
+        </div>
+
+        <div class="size-card">
+          <div class="size-icon"><svg viewBox="0 0 100 100"><path d="M50 18 a32 32 0 0 1 32 32 v10 h-64 v-10 a32 32 0 0 1 32 -32 z" fill="var(--amarelo)"/><rect x="18" y="60" width="64" height="10" rx="4" fill="var(--asfalto-2)"/><rect x="30" y="46" width="40" height="14" rx="4" fill="var(--asfalto)"/></svg></div>
+          <div class="size-name">Capacete de moto</div>
+          <p class="size-caption">O mesmo que ela insiste em bater na minha cabeça toda vez que anda comigo.</p>
+          <div class="size-bar"><div class="size-bar-fill" style="width:50%"></div></div>
+        </div>
+
+        <div class="size-card">
+          <div class="size-icon"><svg viewBox="0 0 100 100"><rect x="30" y="14" width="6" height="70" fill="#8a8a8a"/><path d="M36 18 h40 l-8 12 8 12 h-40 z" fill="var(--vermelho)"/><circle cx="52" cy="30" r="4" fill="var(--creme)"/></svg></div>
+          <div class="size-name">Bandeira da UJS</div>
+          <p class="size-caption">Sua paixão política. Motivo de metade das nossas discussões.</p>
+          <div class="size-bar"><div class="size-bar-fill" style="width:62%"></div></div>
+        </div>
+
+        <div class="size-card">
+          <div class="size-icon"><svg viewBox="0 0 100 100"><rect x="14" y="40" width="72" height="46" fill="var(--azul-claro)"/><polygon points="14,40 50,16 86,40" fill="var(--amarelo)"/><rect x="42" y="60" width="16" height="26" fill="var(--asfalto)"/><rect x="22" y="50" width="12" height="12" fill="var(--creme)"/><rect x="66" y="50" width="12" height="12" fill="var(--creme)"/></svg></div>
+          <div class="size-name">Todo o Midway Mall</div>
+          <p class="size-caption">Nosso segundo endereço. Basicamente onde a gente mora, trabalhando.</p>
+          <div class="size-bar"><div class="size-bar-fill" style="width:74%"></div></div>
+        </div>
+
+        <div class="size-card">
+          <div class="size-icon"><svg viewBox="0 0 100 100"><rect x="14" y="52" width="18" height="34" fill="var(--azul-claro)"/><rect x="36" y="40" width="18" height="46" fill="var(--amarelo)"/><rect x="58" y="58" width="16" height="28" fill="var(--azul-claro)"/><polygon points="45,24 55,24 50,10" fill="var(--vermelho)"/><rect x="47" y="24" width="6" height="16" fill="var(--vermelho)"/></svg></div>
+          <div class="size-name">Cidade de Santa Rita</div>
+          <p class="size-caption">Seu interiorzinho. Pra quem não sabe, é de lá que você veio.</p>
+          <div class="size-bar"><div class="size-bar-fill" style="width:86%"></div></div>
+        </div>
+
+        <div class="size-card">
+          <div class="size-icon"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="18" fill="var(--azul-claro)"/><ellipse cx="50" cy="50" rx="34" ry="10" fill="none" stroke="var(--amarelo)" stroke-width="3"/><circle cx="14" cy="20" r="2.4" fill="var(--creme)"/><circle cx="86" cy="26" r="2" fill="var(--creme)"/><circle cx="20" cy="80" r="2" fill="var(--creme)"/><circle cx="82" cy="78" r="2.6" fill="var(--creme)"/></svg></div>
+          <div class="size-name">O universo</div>
+          <p class="size-caption">Tudo que existe. Todas as galáxias, planetas e buracos negros.</p>
+          <div class="size-bar"><div class="size-bar-fill" style="width:96%"></div></div>
+        </div>
+
+        <div class="size-card final">
+          <div class="size-icon"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="16" fill="var(--vermelho)"/><g stroke="var(--vermelho)" stroke-width="5" stroke-linecap="round"><line x1="50" y1="8" x2="50" y2="22"/><line x1="50" y1="78" x2="50" y2="92"/><line x1="8" y1="50" x2="22" y2="50"/><line x1="78" y1="50" x2="92" y2="50"/><line x1="20" y1="20" x2="30" y2="30"/><line x1="70" y1="70" x2="80" y2="80"/><line x1="80" y1="20" x2="70" y2="30"/><line x1="30" y1="70" x2="20" y2="80"/></g></svg></div>
+          <div class="size-name">Meu ódio por você</div>
+          <p class="size-caption">E mesmo assim, não chega nem perto. É maior que tudo isso junto.</p>
+          <div class="size-bar"><div class="size-bar-fill" style="width:100%"></div></div>
+        </div>
+      </div>
+
+      <div class="size-dots" id="sizeDots"></div>
+      <div class="scroll-hint">
+        <span>continuar</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
     </div>
   </section>
 
   <!-- REVEAL -->
   <section class="scene asfalto" id="scene-reveal">
-    <div class="eyebrow">Recalculando…</div>
-    <h2 style="font-size:clamp(18px,5.6vw,22px);">O medidor não aguentou</h2>
-    <div class="flap-row" id="flapRow">
-      <div class="flap" data-a="Ó" data-b="T">Ó</div>
-      <div class="flap" data-a="D" data-b="U">D</div>
-      <div class="flap" data-a="I" data-b="D">I</div>
-      <div class="flap" data-a="O" data-b="O">O</div>
-    </div>
-    <div class="reveal-sub" id="revealSub">(ok, talvez não seja bem ódio)</div>
-    <div class="scroll-hint">
-      <span>a carta</span>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+    <div class="inner">
+      <div class="eyebrow">Recalculando…</div>
+      <h2 style="font-size:clamp(17px,5.4vw,21px);">Na verdade, ao invés de<br>ódio, seria...</h2>
+      <div class="flap-row" id="flapRow">
+        <div class="flap" data-final="A">Ó</div>
+        <div class="flap" data-final="D">D</div>
+        <div class="flap" data-final="M">I</div>
+        <div class="flap" data-final="I">O</div>
+      </div>
+      <div class="reveal-sub" id="revealSub">(talvez não seja bem ódio)</div>
+      <div class="scroll-hint">
+        <span>a carta</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
     </div>
   </section>
 
   <!-- LETTER -->
-  <section class="scene letter-scene">
-    <div class="eyebrow" style="color:var(--azul);">Anexo final</div>
-    <div class="letter-paper">
-      <div class="washi"></div>
-      <p>Keny,</p>
-      <p>Se você chegou até aqui, obrigado por aguentar meu governo digital.</p>
-      <p>Talvez eu não odeie tanto assim os pisões, os beliscões, as caras de
-      julgamento e as capacetadas no trânsito.</p>
-      <p>Talvez eu só não soubesse como dizer isso sem fazer uma bagunça —
-      tipo esse site.</p>
-      <p>Continua provocando. Eu gosto.</p>
-      <div class="letter-sign">— Jair Messias Bolsonaro</div>
+  <section class="scene letter-scene" id="scene-letter">
+    <div class="inner">
+      <div class="eyebrow" style="color:var(--azul);">Anexo final</div>
+      <div class="letter-paper">
+        <div class="washi"></div>
+        <p>Jeny,</p>
+        <p>Mesmo que eu acabe todo o rolinho de papel das máquinas, eu vou
+        arranjar um jeito de escrever uma cartinha no final do dia, né?</p>
+        <p>Você sabe que no fundo — tão fundo que acha petróleo — eu não
+        odeio tanto assim as pisadas, os beliscões, suas caras e bocas e as
+        capacetadas no trânsito.</p>
+        <p>A verdade é que eu não sei falar nada disso se não for fazendo
+        piada ou algo mirabolante, tipo esse site.</p>
+        <p>Enfim, como prometido, aqui está o site. Espero que continue
+        batendo todas aquelas metas daquele primeiro papelzinho que eu te
+        dei.</p>
+        <div class="letter-sign">— Jair Messias Bolsonaro</div>
+      </div>
+      <button class="extra-toggle" id="extraBtn">ver nota extra</button>
+      <div class="extra-note" id="extraNote">Posso te dar um bufete?</div>
     </div>
-    <button class="extra-toggle" id="extraBtn">ver nota extra</button>
-    <div class="extra-note" id="extraNote">Obs: qualquer semelhança com uma cantada não é mera coincidência.</div>
   </section>
 
 </div>
 
 <script>
 (function(){
-  const app = document.getElementById('app');
-  const scenes = document.querySelectorAll('.scene');
 
-  // Loading sequence
-  const phrases = ["carregando provas…","reunindo testemunhas…","compilando o processo…","quase lá…"];
-  let pi = 0;
+  /* ================= SOUND ENGINE (Web Audio, no files) ================= */
+  const SFX = (function(){
+    let ctx = null;
+    let muted = false;
+    function ensure(){
+      if(!ctx){
+        try{ ctx = new (window.AudioContext || window.webkitAudioContext)(); }
+        catch(e){ return null; }
+      }
+      if(ctx.state === 'suspended'){ ctx.resume().catch(()=>{}); }
+      return ctx;
+    }
+    function tone(freq, dur, type, vol, glideTo){
+      if(muted) return;
+      const c = ensure(); if(!c) return;
+      const t0 = c.currentTime;
+      const osc = c.createOscillator();
+      const gain = c.createGain();
+      osc.type = type || 'sine';
+      osc.frequency.setValueAtTime(freq, t0);
+      if(glideTo){ try{ osc.frequency.exponentialRampToValueAtTime(Math.max(glideTo,20), t0+dur); }catch(e){} }
+      gain.gain.setValueAtTime(0.0001, t0);
+      gain.gain.linearRampToValueAtTime(vol || 0.16, t0+0.012);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t0+dur);
+      osc.connect(gain); gain.connect(c.destination);
+      osc.start(t0); osc.stop(t0+dur+0.02);
+    }
+    function noiseBurst(dur, vol, filterFreq){
+      if(muted) return;
+      const c = ensure(); if(!c) return;
+      const bufferSize = Math.max(1, Math.floor(c.sampleRate * dur));
+      const buffer = c.createBuffer(1, bufferSize, c.sampleRate);
+      const data = buffer.getChannelData(0);
+      for(let i=0;i<bufferSize;i++){ data[i] = (Math.random()*2-1) * (1 - i/bufferSize); }
+      const src = c.createBufferSource(); src.buffer = buffer;
+      const filter = c.createBiquadFilter(); filter.type='bandpass'; filter.frequency.value = filterFreq||2400; filter.Q.value=0.9;
+      const gain = c.createGain();
+      gain.gain.setValueAtTime(vol||0.15, c.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, c.currentTime+dur);
+      src.connect(filter); filter.connect(gain); gain.connect(c.destination);
+      src.start();
+    }
+    return {
+      unlock(){ ensure(); },
+      setMuted(v){ muted = v; },
+      getMuted(){ return muted; },
+      paper(){ noiseBurst(0.26, 0.15, 2600); },
+      thud(){ tone(85,0.3,'sine',0.35,45); },
+      tick(freq){ tone(freq||500, 0.05, 'square', 0.07); },
+      click(){ tone(700,0.06,'triangle',0.1); },
+      lock(freq){ tone(freq||880,0.08,'sine',0.13,(freq||880)*1.3); },
+      chime(){ tone(660,0.55,'sine',0.13,880); },
+      stall(){ tone(90,1.6,'sawtooth',0.045); }
+    };
+  })();
+
+  ['click','touchstart','scroll'].forEach(evt=>{
+    window.addEventListener(evt, ()=>SFX.unlock(), { once:true, passive:true });
+  });
+
+  const muteBtn = document.getElementById('muteBtn');
+  let isMuted = false;
+  muteBtn.addEventListener('click', ()=>{
+    isMuted = !isMuted;
+    SFX.setMuted(isMuted);
+    muteBtn.textContent = isMuted ? '🔇' : '🔊';
+    SFX.unlock();
+  });
+
+  /* ================= LOADING BOOT SEQUENCE ================= */
+  const bootTitle = document.getElementById('bootTitle');
+  const bootChars = "T.E.O.D.E.I.O".split('');
+  bootChars.forEach((ch,i)=>{
+    const span = document.createElement('span');
+    span.textContent = ch === '.' ? '\u00A0' : ch;
+    bootTitle.appendChild(span);
+    setTimeout(()=>{ if(ch !== '.') SFX.tick(500+i*40); }, 50+i*100);
+  });
+
+  const phrases = [
+    "processando beliscadas…",
+    "analisando devocionais atrasados…",
+    "carregando batidas de capacete…",
+    "sincronizando caras de julgamento…",
+    "calibrando nível de paciência…",
+    "quase lá…"
+  ];
+  let pi = -1;
   const loadTextEl = document.getElementById('loadText');
   const loadPctEl = document.getElementById('loadPct');
   const loadRevealEl = document.getElementById('loadReveal');
-  const phraseTimer = setInterval(()=>{
-    pi = (pi+1) % phrases.length;
-    loadTextEl.textContent = phrases[pi];
-  }, 600);
 
-  let pct = 0;
-  const pctTimer = setInterval(()=>{
-    pct += 4;
-    if(pct >= 100){
-      pct = 100;
-      clearInterval(pctTimer);
-      clearInterval(phraseTimer);
-      loadTextEl.textContent = "processo compilado.";
-      loadRevealEl.classList.add('show');
-    }
-    loadPctEl.textContent = pct + '%';
-  }, 95);
+  setTimeout(()=>{
+    const phraseTimer = setInterval(()=>{
+      pi = (pi+1) % phrases.length;
+      loadTextEl.textContent = phrases[pi];
+    }, 620);
 
-  // Intersection observer for generic reveal animations
-  const io = new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{
-      if(e.isIntersecting && e.intersectionRatio > 0.55){
-        e.target.classList.add('active');
-      } else {
-        e.target.classList.remove('active');
+    let pct = 0;
+    const pctTimer = setInterval(()=>{
+      pct += 4;
+      if(pct >= 100){
+        pct = 100;
+        clearInterval(pctTimer);
+        clearInterval(phraseTimer);
+        loadTextEl.textContent = "processo compilado.";
+        loadRevealEl.classList.add('show');
       }
-    });
-  }, { root: app, threshold:[0,0.55,1] });
-  scenes.forEach(s=>io.observe(s));
+      loadPctEl.textContent = pct + '%';
+    }, 100);
+  }, 1450);
 
-  // Gauge animation (plays once)
+  /* ================= EVIDENCE CARD TILT ================= */
+  document.querySelectorAll('.evidence-card').forEach(c=>{
+    const r = (Math.random()*6-3).toFixed(1);
+    c.style.setProperty('--tilt', r+'deg');
+  });
+
+  /* ================= GAUGE ================= */
   const gaugeScene = document.getElementById('scene-gauge');
   const gFill = document.getElementById('gFill');
   const gTrack = document.getElementById('gTrack');
@@ -634,17 +970,28 @@
   gFill.style.strokeDasharray = trackLen;
   gFill.style.strokeDashoffset = trackLen;
 
-  function easeOutCubic(t){ return 1 - Math.pow(1-t,3); }
+  function easeInOutCubic(t){ return t<0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2; }
+
+  function zoneLabel(p){
+    if(p > 100) return 'nível: velhinha abusada';
+    if(p >= 88) return 'velhinha traumática';
+    if(p >= 70) return 'reclamação da fabiana';
+    if(p >= 52) return 'sem meta batida';
+    if(p >= 34) return 'chegar atrasado';
+    if(p >= 16) return 'totem bugando';
+    return 'não teve doce';
+  }
 
   function playGauge(){
     if(gaugePlayed) return;
     gaugePlayed = true;
-    const duration = 2600;
-    const targetPercent = 137; // "fora de escala"
+    const duration = 4400;
+    const targetPercent = 148;
     const start = performance.now();
+    let lastBucket = -1;
     function frame(now){
       const t = Math.min((now-start)/duration, 1);
-      const eased = easeOutCubic(t);
+      const eased = easeInOutCubic(t);
       const currentPercent = eased * targetPercent;
       const travel = Math.min(currentPercent/100, 1) * trackLen;
       gFill.style.strokeDashoffset = trackLen - travel;
@@ -654,71 +1001,191 @@
 
       if(currentPercent <= 100){
         gaugeVal.textContent = Math.round(currentPercent) + '%';
-        gaugeVal.classList.remove('over');
+        gaugeVal.classList.toggle('over', currentPercent>=88);
       } else {
         gaugeVal.textContent = 'FORA DE ESCALA';
         gaugeVal.classList.add('over');
       }
-      if(currentPercent < 20) gaugeSub.textContent = 'baixo';
-      else if(currentPercent < 50) gaugeSub.textContent = 'médio';
-      else if(currentPercent < 90) gaugeSub.textContent = 'alto';
-      else gaugeSub.textContent = 'crítico';
+      gaugeSub.textContent = zoneLabel(currentPercent);
+
+      const bucket = Math.floor(currentPercent/6);
+      if(bucket !== lastBucket){
+        lastBucket = bucket;
+        SFX.tick(260 + currentPercent*3);
+      }
 
       if(t < 1){ requestAnimationFrame(frame); }
       else {
         gaugeScene.classList.add('shake');
+        SFX.thud();
         setTimeout(()=>gaugeScene.classList.remove('shake'), 550);
       }
     }
     requestAnimationFrame(frame);
   }
 
-  const gaugeObserver = new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{
-      if(e.isIntersecting && e.intersectionRatio > 0.6){ playGauge(); }
-    });
-  }, { root: app, threshold:0.6 });
-  gaugeObserver.observe(gaugeScene);
+  /* ================= VERDICT / COUNTDOWN ================= */
+  const verdictScene = document.getElementById('scene-verdict');
+  const countdownNum = document.getElementById('countdownNum');
+  const culpadaStamp = document.getElementById('culpadaStamp');
+  let verdictPlayed = false;
 
-  // Flap reveal (plays once)
+  function playVerdict(){
+    if(verdictPlayed) return;
+    verdictPlayed = true;
+    const seq = ['3','2','1'];
+    seq.forEach((n,i)=>{
+      setTimeout(()=>{
+        countdownNum.textContent = n;
+        SFX.tick(380+i*70);
+      }, i*680);
+    });
+    setTimeout(()=>{
+      countdownNum.textContent = '';
+      culpadaStamp.classList.add('show');
+      SFX.thud();
+    }, seq.length*680 + 250);
+  }
+
+  /* ================= SIZE SLIDER ================= */
+  const sizeSlider = document.getElementById('sizeSlider');
+  const sizeCards = sizeSlider.querySelectorAll('.size-card');
+  const sizeDotsWrap = document.getElementById('sizeDots');
+  sizeCards.forEach((_,i)=>{
+    const d = document.createElement('div');
+    d.className = 'size-dot' + (i===0 ? ' active' : '');
+    sizeDotsWrap.appendChild(d);
+  });
+  const dots = sizeDotsWrap.querySelectorAll('.size-dot');
+  let currentSizeIndex = 0;
+  const sizeObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting && e.intersectionRatio > 0.6){
+        const idx = Array.from(sizeCards).indexOf(e.target);
+        if(idx !== -1 && idx !== currentSizeIndex){
+          currentSizeIndex = idx;
+          dots.forEach((d,i)=>d.classList.toggle('active', i===idx));
+          SFX.click();
+        }
+      }
+    });
+  }, { root: sizeSlider, threshold:0.6 });
+  sizeCards.forEach(c=>sizeObserver.observe(c));
+
+  /* ================= FLAP REVEAL ================= */
   const revealScene = document.getElementById('scene-reveal');
-  const flaps = document.querySelectorAll('.flap');
+  const flapRow = document.getElementById('flapRow');
   const revealSub = document.getElementById('revealSub');
   let flapPlayed = false;
 
   function playFlap(){
     if(flapPlayed) return;
     flapPlayed = true;
-    flaps.forEach((flap, i)=>{
-      setTimeout(()=>{
-        flap.classList.add('flipping');
-        setTimeout(()=>{
-          flap.textContent = flap.dataset.b;
-          flap.classList.add('done');
-          flap.classList.remove('flipping');
-        }, 260);
-      }, 500 + i*180);
+
+    const pool = "ABCDEFGHIJKLMNOPQRSTUVWXYZÃÇÕÁÉÍÓÚ";
+    function randLetter(){ return pool[Math.floor(Math.random()*pool.length)]; }
+
+    const finals = ["A","D","M","I","R","A","Ç","Ã","O"];
+    const existing = Array.from(flapRow.children);
+    existing.forEach((el,i)=>{ el.dataset.final = finals[i]; });
+
+    const newTiles = [];
+    for(let i=4;i<9;i++){
+      const d = document.createElement('div');
+      d.className = 'flap new';
+      d.dataset.final = finals[i];
+      d.textContent = '';
+      flapRow.appendChild(d);
+      newTiles.push(d);
+    }
+    const allTiles = existing.concat(newTiles);
+
+    requestAnimationFrame(()=>{
+      newTiles.forEach(t=>{ t.textContent = randLetter(); t.classList.add('show'); });
     });
-    setTimeout(()=>{
-      revealScene.classList.add('flip-bg');
-      revealSub.classList.add('show');
-    }, 500 + flaps.length*180 + 400);
+    existing.forEach(t=>{ t.textContent = randLetter(); });
+
+    const spinners = allTiles.map(tile=>{
+      return setInterval(()=>{ tile.textContent = randLetter(); }, 70);
+    });
+
+    const order = [...Array(9).keys()];
+    for(let i=order.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [order[i],order[j]] = [order[j],order[i]];
+    }
+
+    let cumulative = 700;
+    const lockTimes = [];
+    order.forEach((tileIdx, pos)=>{
+      let gap;
+      if(pos < 7){ gap = 350 + Math.random()*430; }
+      else if(pos === 7){ gap = 1750; }
+      else { gap = 1150; }
+      cumulative += gap;
+      lockTimes.push({ tileIdx, time: cumulative, pos });
+    });
+
+    lockTimes.forEach(({tileIdx, time, pos})=>{
+      if(pos === 7){
+        setTimeout(()=>{ flapRow.classList.add('stalling'); SFX.stall(); }, time - 1750);
+      }
+      setTimeout(()=>{
+        clearInterval(spinners[tileIdx]);
+        const tile = allTiles[tileIdx];
+        tile.textContent = tile.dataset.final;
+        tile.classList.add('done');
+        SFX.lock(700 + tileIdx*40);
+        if(pos === 7){ flapRow.classList.remove('stalling'); }
+        if(pos === lockTimes.length-1){
+          setTimeout(()=>{
+            revealScene.classList.add('flip-bg');
+            revealSub.classList.add('show');
+            SFX.chime();
+          }, 550);
+        }
+      }, time);
+    });
   }
 
-  const revealObserver = new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{
-      if(e.isIntersecting && e.intersectionRatio > 0.6){ playFlap(); }
-    });
-  }, { root: app, threshold:0.6 });
-  revealObserver.observe(revealScene);
-
-  // Extra note toggle
+  /* ================= EXTRA NOTE ================= */
   const extraBtn = document.getElementById('extraBtn');
   const extraNote = document.getElementById('extraNote');
   extraBtn.addEventListener('click', ()=>{
     const showing = extraNote.classList.toggle('show');
     extraBtn.textContent = showing ? 'ok, entendi' : 'ver nota extra';
+    SFX.click();
   });
+
+  /* ================= GENERIC SCENE OBSERVER ================= */
+  const app = document.getElementById('app');
+  const scenes = document.querySelectorAll('.scene');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      const el = e.target;
+      if(e.isIntersecting && e.intersectionRatio > 0.55){
+        el.classList.add('active');
+        if(!el.dataset.soundPlayed){
+          el.dataset.soundPlayed = '1';
+          if(el.querySelector('.evidence-card')) SFX.paper();
+          if(el.id === 'scene-cover'){
+            setTimeout(()=>{
+              document.getElementById('urgentStamp').classList.add('show');
+              SFX.thud();
+            }, 350);
+          }
+          if(el.id === 'scene-verdict') playVerdict();
+          if(el.id === 'scene-gauge') playGauge();
+          if(el.id === 'scene-reveal') playFlap();
+          if(el.id === 'scene-letter') SFX.chime();
+        }
+      } else {
+        el.classList.remove('active');
+      }
+    });
+  }, { root: app, threshold:[0,0.55,1] });
+  scenes.forEach(s=>io.observe(s));
+
 })();
 </script>
 
