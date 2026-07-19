@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Processo nº 004-JK — Boletim de Ocorrência</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Karla:wght@400;500;600;700&family=Caveat:wght@500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --azul: #2E5FA3;
+    --azul-claro: #7FA8D9;
+    --azul-suave: #E8F0FA;
+    --amarelo: #F5B324;
+    --vermelho: #E14D4D;
+    --vermelho-escuro: #7A1F1F;
+    --verde: #3FA34D;
+    --asfalto: #1E222B;
+    --asfalto-2: #262B36;
+    --kraft: #DCC9A3;
+    --kraft-escuro: #2A2013;
+    --tinta: #21201C;
+    --creme: #FFF8EC;
+  }
+
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body{
+    margin:0; padding:0; height:100%;
+    font-family:'Karla',sans-serif;
+    background:var(--asfalto);
+    color:var(--creme);
+    overflow-x:hidden;
+  }
+
+  #app{
+    height:100dvh;
+    overflow-y:auto;
+    overflow-x:hidden;
+    scroll-snap-type:y mandatory;
+    -webkit-overflow-scrolling:touch;
+  }
+
+  .scene{
+    min-height:100dvh;
+    min-height:100svh;
+    scroll-snap-align:start;
+    scroll-snap-stop:always;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    position:relative;
+    padding:36px 26px;
+    padding-top:calc(36px + env(safe-area-inset-top));
+    padding-bottom:calc(36px + env(safe-area-inset-bottom));
+    text-align:center;
+    overflow:hidden;
+  }
+
+  .eyebrow{
+    font-family:'Space Mono',monospace;
+    font-size:clamp(11px,3.2vw,13px);
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    opacity:.75;
+    margin-bottom:14px;
+  }
+
+  h1,h2{
+    font-family:'Anton',sans-serif;
+    font-weight:400;
+    line-height:1.05;
+    letter-spacing:.01em;
+    margin:0 0 14px;
+    text-transform:uppercase;
+  }
+
+  p{ margin:0 0 12px; line-height:1.5; font-size:clamp(15px,4vw,17px); }
+
+  .stamp{
+    display:inline-block;
+    border:3px solid currentColor;
+    border-radius:8px;
+    padding:6px 14px;
+    font-family:'Space Mono',monospace;
+    font-size:clamp(11px,3vw,13px);
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    transform:rotate(-4deg);
+    opacity:.9;
+  }
+
+  .scroll-hint{
+    position:absolute;
+    bottom:calc(22px + env(safe-area-inset-bottom));
+    left:50%;
+    transform:translateX(-50%);
+    font-family:'Space Mono',monospace;
+    font-size:12px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    opacity:.6;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:4px;
+    animation:bob 1.8s ease-in-out infinite;
+  }
+  .scroll-hint svg{ width:16px; height:16px; }
+  @keyframes bob{ 0%,100%{ transform:translate(-50%,0);} 50%{ transform:translate(-50%,6px);} }
+
+  /* ---------- SCENE 0: LOADING ---------- */
+  #scene-loading{ background:var(--asfalto); }
+  .load-road{
+    width:min(260px,70vw);
+    height:6px;
+    background:rgba(255,255,255,.12);
+    border-radius:4px;
+    margin:26px 0 18px;
+    overflow:hidden;
+    position:relative;
+  }
+  .load-road::after{
+    content:'';
+    position:absolute; inset:0;
+    background:repeating-linear-gradient(90deg, var(--amarelo) 0 14px, transparent 14px 26px);
+    width:0%;
+    animation:loadfill 2.4s ease-out forwards;
+  }
+  @keyframes loadfill{ to{ width:100%; } }
+  #loadText{
+    font-family:'Space Mono',monospace;
+    font-size:13px;
+    letter-spacing:.06em;
+    opacity:.8;
+    min-height:18px;
+  }
+  #loadPct{
+    font-family:'Anton',sans-serif;
+    font-size:44px;
+    color:var(--amarelo);
+  }
+  .load-reveal{
+    opacity:0;
+    transition:opacity .6s ease;
+    margin-top:22px;
+  }
+  .load-reveal.show{ opacity:1; }
+
+  /* ---------- KRAFT / CASE FILE SCENES ---------- */
+  .kraft{
+    background:
+      radial-gradient(1200px 600px at 20% -10%, rgba(255,255,255,.10), transparent 60%),
+      var(--kraft);
+    color:var(--kraft-escuro);
+  }
+  .kraft .eyebrow{ color:var(--vermelho-escuro); opacity:.85; }
+
+  .case-cover{ max-width:380px; }
+  .case-box{
+    border:2px solid var(--kraft-escuro);
+    border-radius:4px;
+    padding:22px 20px;
+    background:rgba(255,255,255,.18);
+    position:relative;
+  }
+  .case-box .stamp{
+    position:absolute;
+    top:-18px; right:-10px;
+    background:var(--kraft);
+    color:var(--vermelho-escuro);
+    border-color:var(--vermelho-escuro);
+    box-shadow:0 2px 0 rgba(0,0,0,.08);
+  }
+  .case-row{
+    display:flex; justify-content:space-between; gap:10px;
+    font-family:'Space Mono',monospace;
+    font-size:12.5px;
+    padding:7px 0;
+    border-top:1px dashed rgba(42,32,19,.35);
+  }
+  .case-row:first-child{ border-top:none; }
+  .case-row b{ text-transform:uppercase; letter-spacing:.04em; }
+
+  /* Evidence cards */
+  .evidence-num{
+    font-family:'Anton',sans-serif;
+    font-size:clamp(46px,16vw,64px);
+    color:rgba(42,32,19,.16);
+    line-height:1;
+    margin-bottom:-6px;
+  }
+  .evidence-card{
+    max-width:360px;
+    width:100%;
+    background:rgba(255,255,255,.35);
+    border:2px solid var(--kraft-escuro);
+    border-radius:6px;
+    padding:22px 20px 20px;
+    position:relative;
+    opacity:0;
+    transform:translateY(18px);
+    transition:opacity .7s ease, transform .7s ease;
+  }
+  .scene.active .evidence-card{ opacity:1; transform:translateY(0); }
+  .evidence-card::before{
+    content:'';
+    position:absolute;
+    top:-10px; left:26px;
+    width:54px; height:18px;
+    background:rgba(225,77,77,.35);
+    border:1px solid rgba(225,77,77,.5);
+    transform:rotate(-3deg);
+  }
+  .evidence-title{
+    font-family:'Anton',sans-serif;
+    font-size:clamp(19px,5.6vw,24px);
+    margin-bottom:8px;
+    text-transform:uppercase;
+  }
+  .evidence-tag{
+    display:inline-block;
+    font-family:'Space Mono',monospace;
+    font-size:11px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    background:var(--vermelho-escuro);
+    color:var(--kraft);
+    padding:3px 8px;
+    border-radius:3px;
+    margin-bottom:10px;
+  }
+  .evidence-card p{ font-size:15px; opacity:.92; }
+
+  /* transition beat */
+  .verdict{ max-width:340px; }
+  .verdict .stamp{ margin-top:18px; color:var(--vermelho-escuro); border-color:var(--vermelho-escuro); }
+
+  /* ---------- ASFALTO / GAUGE SCENES ---------- */
+  .asfalto{
+    background:
+      radial-gradient(900px 500px at 80% 110%, rgba(245,179,36,.10), transparent 60%),
+      var(--asfalto);
+    color:var(--creme);
+  }
+  .asfalto .eyebrow{ color:var(--amarelo); }
+
+  .gauge-wrap{ width:min(280px,78vw); margin:8px auto 4px; position:relative; }
+  .gauge-wrap svg{ width:100%; height:auto; display:block; }
+  .gauge-readout{
+    margin-top:6px;
+    font-family:'Anton',sans-serif;
+    font-size:clamp(38px,13vw,52px);
+    color:var(--amarelo);
+    transition:color .3s ease;
+  }
+  .gauge-readout.over{ color:var(--vermelho); }
+  .gauge-sub{
+    font-family:'Space Mono',monospace;
+    font-size:12px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    opacity:.7;
+  }
+  .scene.shake .gauge-card{ animation:shake .5s ease; }
+  @keyframes shake{
+    0%,100%{ transform:translateX(0); }
+    20%{ transform:translateX(-6px) rotate(-.6deg); }
+    40%{ transform:translateX(5px) rotate(.6deg); }
+    60%{ transform:translateX(-4px); }
+    80%{ transform:translateX(3px); }
+  }
+
+  /* Comparativo */
+  .compare-list{ max-width:340px; width:100%; text-align:left; }
+  .compare-item{
+    font-family:'Karla',sans-serif;
+    font-size:clamp(15px,4.4vw,17px);
+    padding:10px 0;
+    border-bottom:1px solid rgba(255,255,255,.12);
+    opacity:0;
+    transform:translateX(-14px);
+    transition:opacity .55s ease, transform .55s ease;
+  }
+  .compare-item b{ color:var(--amarelo); }
+  .scene.active .compare-item{ opacity:1; transform:translateX(0); }
+  .compare-item:nth-child(1){ transition-delay:.05s; }
+  .compare-item:nth-child(2){ transition-delay:.25s; }
+  .compare-item:nth-child(3){ transition-delay:.45s; }
+  .compare-item:nth-child(4){ transition-delay:.65s; }
+  .compare-item:nth-child(5){ transition-delay:.85s; }
+  .compare-item:last-child{ border-bottom:none; font-weight:700; color:var(--creme); }
+
+  /* Reveal / flap */
+  #scene-reveal{ transition:background-color 1.8s ease, color 1.8s ease; }
+  #scene-reveal.flip-bg{ background:var(--azul-suave); color:var(--azul); }
+  #scene-reveal .eyebrow{ transition:color 1.8s ease; }
+  #scene-reveal.flip-bg .eyebrow{ color:var(--azul); opacity:.7; }
+
+  .flap-row{ display:flex; gap:8px; justify-content:center; margin:10px 0 16px; }
+  .flap{
+    width:clamp(46px,13vw,58px);
+    height:clamp(60px,17vw,72px);
+    background:var(--asfalto-2);
+    border-radius:6px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Anton',sans-serif;
+    font-size:clamp(28px,8.4vw,36px);
+    color:var(--amarelo);
+    box-shadow:0 3px 0 rgba(0,0,0,.3);
+    transition:background .5s ease, color .5s ease, transform .18s ease;
+  }
+  .flap.flipping{ transform:scaleY(.15); }
+  .flap.done{ background:var(--azul); color:#fff; }
+
+  .reveal-sub{
+    font-family:'Caveat',cursive;
+    font-size:clamp(18px,5.4vw,22px);
+    opacity:0;
+    transition:opacity 1.2s ease;
+    margin-top:6px;
+  }
+  .reveal-sub.show{ opacity:.95; }
+
+  /* Letter */
+  .letter-scene{ background:var(--creme); color:var(--tinta); }
+  .letter-paper{
+    max-width:360px;
+    background:#fff;
+    border:1px solid rgba(0,0,0,.08);
+    border-radius:4px;
+    padding:26px 22px;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+    position:relative;
+    text-align:left;
+  }
+  .washi{
+    position:absolute; top:-12px; left:24px;
+    width:64px; height:20px;
+    background:rgba(46,95,163,.28);
+    transform:rotate(-4deg);
+    border:1px solid rgba(46,95,163,.35);
+  }
+  .letter-paper p{
+    font-family:'Caveat',cursive;
+    font-size:clamp(19px,5.6vw,22px);
+    line-height:1.45;
+    color:var(--tinta);
+    margin-bottom:10px;
+  }
+  .letter-sign{
+    margin-top:14px;
+    font-family:'Caveat',cursive;
+    font-size:clamp(21px,6vw,25px);
+    font-weight:700;
+    color:var(--azul);
+  }
+  .extra-toggle{
+    margin-top:18px;
+    background:none;
+    border:1px dashed rgba(33,32,28,.4);
+    border-radius:20px;
+    padding:8px 16px;
+    font-family:'Space Mono',monospace;
+    font-size:11.5px;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    color:var(--tinta);
+    opacity:.75;
+  }
+  .extra-note{
+    max-width:320px;
+    margin-top:14px;
+    font-family:'Karla',sans-serif;
+    font-size:14px;
+    opacity:0;
+    max-height:0;
+    overflow:hidden;
+    transition:opacity .5s ease, max-height .5s ease;
+  }
+  .extra-note.show{ opacity:.85; max-height:120px; }
+
+  @media (prefers-reduced-motion:reduce){
+    *{ animation:none !important; transition:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- SCENE 0: LOADING -->
+  <section class="scene" id="scene-loading">
+    <div class="eyebrow">Sistema de Ocorrências · v1.0</div>
+    <div class="load-road"></div>
+    <div id="loadPct">0%</div>
+    <div id="loadText">carregando provas…</div>
+    <div class="load-reveal" id="loadReveal">
+      <div class="scroll-hint" style="position:static;">
+        <span>deslize pra abrir o processo</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCENE 1: CAPA DO PROCESSO -->
+  <section class="scene kraft case-cover">
+    <div class="eyebrow">Processo nº 004-JK</div>
+    <h1 style="font-size:clamp(30px,9.5vw,42px);">Boletim de<br>Ocorrência<br>Sentimental</h1>
+    <div class="case-box">
+      <span class="stamp">urgente</span>
+      <div class="case-row"><span>Vítima</span><b>Eu</b></div>
+      <div class="case-row"><span>Suspeita</span><b>Keny</b></div>
+      <div class="case-row"><span>Natureza</span><b>Provocação reiterada</b></div>
+      <div class="case-row"><span>Reincidência</span><b>Diária</b></div>
+      <div class="case-row"><span>Status</span><b>Em investigação</b></div>
+    </div>
+    <div class="scroll-hint">
+      <span>ver provas</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+    </div>
+  </section>
+
+  <!-- EVIDENCE 1 -->
+  <section class="scene kraft">
+    <div class="evidence-num">01</div>
+    <div class="evidence-card">
+      <span class="evidence-tag">Prova nº 01</span>
+      <div class="evidence-title">O pisão</div>
+      <p>Local do crime: em cima do meu pé. Frequência: sempre que dá.
+      Sem aviso, sem desculpa, sem dó.</p>
+    </div>
+  </section>
+
+  <!-- EVIDENCE 2 -->
+  <section class="scene kraft">
+    <div class="evidence-num">02</div>
+    <div class="evidence-card">
+      <span class="evidence-tag">Prova nº 02</span>
+      <div class="evidence-title">O beliscão</div>
+      <p>Sem motivo aparente. Sem sinal de perigo. Só pra ver
+      minha cara de dor e rir depois.</p>
+    </div>
+  </section>
+
+  <!-- EVIDENCE 3 -->
+  <section class="scene kraft">
+    <div class="evidence-num">03</div>
+    <div class="evidence-card">
+      <span class="evidence-tag">Prova nº 03</span>
+      <div class="evidence-title">A cara de julgamento</div>
+      <p>De cima pra baixo. Sem falar nada. Não precisa —
+      o olhar já é a sentença.</p>
+    </div>
+  </section>
+
+  <!-- EVIDENCE 4 -->
+  <section class="scene kraft">
+    <div class="evidence-num">04</div>
+    <div class="evidence-card">
+      <span class="evidence-tag">Prova nº 04</span>
+      <div class="evidence-title">O tapa</div>
+      <p>Às vezes um. Às vezes vários. Nunca com aviso prévio,
+      sempre com "eu avisei".</p>
+    </div>
+  </section>
+
+  <!-- EVIDENCE 5 -->
+  <section class="scene kraft">
+    <div class="evidence-num">05</div>
+    <div class="evidence-card">
+      <span class="evidence-tag">Prova nº 05</span>
+      <div class="evidence-title">A capacetada</div>
+      <p>Ela bate o capacete dela no meu toda vez que dou carona.
+      Testemunha: o trânsito inteiro de Natal.</p>
+    </div>
+  </section>
+
+  <!-- EVIDENCE 6 -->
+  <section class="scene kraft">
+    <div class="evidence-num">06</div>
+    <div class="evidence-card">
+      <span class="evidence-tag">Prova nº 06</span>
+      <div class="evidence-title">O olhar de reprovação</div>
+      <p>Não precisa fazer nada. Só olhar já condena.
+      Reincide todos os dias, sem exceção.</p>
+    </div>
+    <div class="scroll-hint">
+      <span>o veredito</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+    </div>
+  </section>
+
+  <!-- VERDICT TRANSITION -->
+  <section class="scene kraft verdict">
+    <div class="eyebrow">Conclusão parcial</div>
+    <h2 style="font-size:clamp(24px,7.5vw,30px);">Diante do exposto,<br>resta comprovado,<br>com fartura de provas:</h2>
+    <div class="stamp">culpada</div>
+  </section>
+
+  <!-- GAUGE SCENE -->
+  <section class="scene asfalto" id="scene-gauge">
+    <div class="eyebrow">Medidor oficial</div>
+    <h2 style="font-size:clamp(22px,7vw,28px);">Nível de ódio</h2>
+    <div class="gauge-wrap gauge-card">
+      <svg viewBox="0 0 300 175">
+        <defs>
+          <linearGradient id="gGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#3FA34D"/>
+            <stop offset="45%" stop-color="#F5B324"/>
+            <stop offset="78%" stop-color="#E14D4D"/>
+            <stop offset="100%" stop-color="#7A1F1F"/>
+          </linearGradient>
+        </defs>
+        <path id="gTrack" d="M22,160 A128,128 0 0 1 278,160" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="22" stroke-linecap="round"/>
+        <path id="gFill" d="M22,160 A128,128 0 0 1 278,160" fill="none" stroke="url(#gGrad)" stroke-width="22" stroke-linecap="round"/>
+        <circle id="gDot" cx="22" cy="160" r="9" fill="#FFF8EC"/>
+      </svg>
+      <div class="gauge-readout" id="gaugeVal">0%</div>
+      <div class="gauge-sub" id="gaugeSub">baixo</div>
+    </div>
+    <div class="scroll-hint">
+      <span>o tamanho disso</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+    </div>
+  </section>
+
+  <!-- COMPARATIVO -->
+  <section class="scene asfalto">
+    <div class="eyebrow">Comparativo de tamanho</div>
+    <h2 style="font-size:clamp(20px,6.5vw,26px);">Pra você entender<br>o tamanho disso:</h2>
+    <div class="compare-list">
+      <div class="compare-item">É maior que <b>uma pizza inteira</b> — e olha que eu não divido pizza com ninguém.</div>
+      <div class="compare-item">É maior que <b>um capacete</b> — e olha que ele já levou umas capacetadas.</div>
+      <div class="compare-item">É maior que <b>essa moto</b> que eu ando o dia inteiro.</div>
+      <div class="compare-item">É maior que <b>a Ponte Newton Navarro</b>.</div>
+      <div class="compare-item">É maior que <b>toda a Via Costeira</b>, de ponta a ponta.</div>
+      <div class="compare-item">Na real, isso aqui não cabe <b>em Natal inteira</b>.</div>
+    </div>
+    <div class="scroll-hint">
+      <span>continuar</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+    </div>
+  </section>
+
+  <!-- REVEAL -->
+  <section class="scene asfalto" id="scene-reveal">
+    <div class="eyebrow">Recalculando…</div>
+    <h2 style="font-size:clamp(18px,5.6vw,22px);">O medidor não aguentou</h2>
+    <div class="flap-row" id="flapRow">
+      <div class="flap" data-a="Ó" data-b="T">Ó</div>
+      <div class="flap" data-a="D" data-b="U">D</div>
+      <div class="flap" data-a="I" data-b="D">I</div>
+      <div class="flap" data-a="O" data-b="O">O</div>
+    </div>
+    <div class="reveal-sub" id="revealSub">(ok, talvez não seja bem ódio)</div>
+    <div class="scroll-hint">
+      <span>a carta</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+    </div>
+  </section>
+
+  <!-- LETTER -->
+  <section class="scene letter-scene">
+    <div class="eyebrow" style="color:var(--azul);">Anexo final</div>
+    <div class="letter-paper">
+      <div class="washi"></div>
+      <p>Keny,</p>
+      <p>Se você chegou até aqui, obrigado por aguentar meu governo digital.</p>
+      <p>Talvez eu não odeie tanto assim os pisões, os beliscões, as caras de
+      julgamento e as capacetadas no trânsito.</p>
+      <p>Talvez eu só não soubesse como dizer isso sem fazer uma bagunça —
+      tipo esse site.</p>
+      <p>Continua provocando. Eu gosto.</p>
+      <div class="letter-sign">— Jair Messias Bolsonaro</div>
+    </div>
+    <button class="extra-toggle" id="extraBtn">ver nota extra</button>
+    <div class="extra-note" id="extraNote">Obs: qualquer semelhança com uma cantada não é mera coincidência.</div>
+  </section>
+
+</div>
+
+<script>
+(function(){
+  const app = document.getElementById('app');
+  const scenes = document.querySelectorAll('.scene');
+
+  // Loading sequence
+  const phrases = ["carregando provas…","reunindo testemunhas…","compilando o processo…","quase lá…"];
+  let pi = 0;
+  const loadTextEl = document.getElementById('loadText');
+  const loadPctEl = document.getElementById('loadPct');
+  const loadRevealEl = document.getElementById('loadReveal');
+  const phraseTimer = setInterval(()=>{
+    pi = (pi+1) % phrases.length;
+    loadTextEl.textContent = phrases[pi];
+  }, 600);
+
+  let pct = 0;
+  const pctTimer = setInterval(()=>{
+    pct += 4;
+    if(pct >= 100){
+      pct = 100;
+      clearInterval(pctTimer);
+      clearInterval(phraseTimer);
+      loadTextEl.textContent = "processo compilado.";
+      loadRevealEl.classList.add('show');
+    }
+    loadPctEl.textContent = pct + '%';
+  }, 95);
+
+  // Intersection observer for generic reveal animations
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting && e.intersectionRatio > 0.55){
+        e.target.classList.add('active');
+      } else {
+        e.target.classList.remove('active');
+      }
+    });
+  }, { root: app, threshold:[0,0.55,1] });
+  scenes.forEach(s=>io.observe(s));
+
+  // Gauge animation (plays once)
+  const gaugeScene = document.getElementById('scene-gauge');
+  const gFill = document.getElementById('gFill');
+  const gTrack = document.getElementById('gTrack');
+  const gDot = document.getElementById('gDot');
+  const gaugeVal = document.getElementById('gaugeVal');
+  const gaugeSub = document.getElementById('gaugeSub');
+  let gaugePlayed = false;
+  const trackLen = gTrack.getTotalLength();
+  gFill.style.strokeDasharray = trackLen;
+  gFill.style.strokeDashoffset = trackLen;
+
+  function easeOutCubic(t){ return 1 - Math.pow(1-t,3); }
+
+  function playGauge(){
+    if(gaugePlayed) return;
+    gaugePlayed = true;
+    const duration = 2600;
+    const targetPercent = 137; // "fora de escala"
+    const start = performance.now();
+    function frame(now){
+      const t = Math.min((now-start)/duration, 1);
+      const eased = easeOutCubic(t);
+      const currentPercent = eased * targetPercent;
+      const travel = Math.min(currentPercent/100, 1) * trackLen;
+      gFill.style.strokeDashoffset = trackLen - travel;
+      const pt = gTrack.getPointAtLength(travel);
+      gDot.setAttribute('cx', pt.x);
+      gDot.setAttribute('cy', pt.y);
+
+      if(currentPercent <= 100){
+        gaugeVal.textContent = Math.round(currentPercent) + '%';
+        gaugeVal.classList.remove('over');
+      } else {
+        gaugeVal.textContent = 'FORA DE ESCALA';
+        gaugeVal.classList.add('over');
+      }
+      if(currentPercent < 20) gaugeSub.textContent = 'baixo';
+      else if(currentPercent < 50) gaugeSub.textContent = 'médio';
+      else if(currentPercent < 90) gaugeSub.textContent = 'alto';
+      else gaugeSub.textContent = 'crítico';
+
+      if(t < 1){ requestAnimationFrame(frame); }
+      else {
+        gaugeScene.classList.add('shake');
+        setTimeout(()=>gaugeScene.classList.remove('shake'), 550);
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  const gaugeObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting && e.intersectionRatio > 0.6){ playGauge(); }
+    });
+  }, { root: app, threshold:0.6 });
+  gaugeObserver.observe(gaugeScene);
+
+  // Flap reveal (plays once)
+  const revealScene = document.getElementById('scene-reveal');
+  const flaps = document.querySelectorAll('.flap');
+  const revealSub = document.getElementById('revealSub');
+  let flapPlayed = false;
+
+  function playFlap(){
+    if(flapPlayed) return;
+    flapPlayed = true;
+    flaps.forEach((flap, i)=>{
+      setTimeout(()=>{
+        flap.classList.add('flipping');
+        setTimeout(()=>{
+          flap.textContent = flap.dataset.b;
+          flap.classList.add('done');
+          flap.classList.remove('flipping');
+        }, 260);
+      }, 500 + i*180);
+    });
+    setTimeout(()=>{
+      revealScene.classList.add('flip-bg');
+      revealSub.classList.add('show');
+    }, 500 + flaps.length*180 + 400);
+  }
+
+  const revealObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting && e.intersectionRatio > 0.6){ playFlap(); }
+    });
+  }, { root: app, threshold:0.6 });
+  revealObserver.observe(revealScene);
+
+  // Extra note toggle
+  const extraBtn = document.getElementById('extraBtn');
+  const extraNote = document.getElementById('extraNote');
+  extraBtn.addEventListener('click', ()=>{
+    const showing = extraNote.classList.toggle('show');
+    extraBtn.textContent = showing ? 'ok, entendi' : 'ver nota extra';
+  });
+})();
+</script>
+
+</body>
+</html>
